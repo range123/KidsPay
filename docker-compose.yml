@@ -1,0 +1,14 @@
+services:
+    db:
+        image: postgres:latest
+        volumes:
+        - app-db-data:/var/lib/postgresql/data/pgdata
+        environment:
+        - PGDATA=/var/lib/postgresql/data/pgdata
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+        - POSTGRES_DB=app
+        ports:
+        - 5432:5432
+volumes:
+    app-db-data:
