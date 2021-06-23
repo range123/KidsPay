@@ -5,9 +5,11 @@ from pydantic import AnyHttpUrl, BaseSettings, EmailStr, HttpUrl, PostgresDsn, v
 
 
 class Settings(BaseSettings):
-    SECRET_KEY: str = secrets.token_urlsafe(32)
+    # SECRET_KEY: str = secrets.token_urlsafe(32)
+    SECRET_KEY_PARENT: str = "1ff38cc8a80daca1b1be35efa773f612a333b07d165ef6c1ff8b638bd80cb4a0"
+    SECRET_KEY_CHILD: str = "7f44c488a77d4f84aa0402bfbc346c8366240397452e486b2e0f4e0f397fbce4"
     # 60 minutes * 24 hours * 8 days = 8 days
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 365
     # SERVER_NAME: str
     # SERVER_HOST: AnyHttpUrl
     # BACKEND_CORS_ORIGINS is a JSON-formatted list of origins
@@ -43,6 +45,7 @@ class Settings(BaseSettings):
             host=values.get("POSTGRES_SERVER"),
             path=f"/{values.get('POSTGRES_DB') or ''}",
         )
+    
 
 
 
