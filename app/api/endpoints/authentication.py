@@ -1,4 +1,8 @@
+from os import name
+from app.schemas.parent import ParentCreatePYPL
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi import Header
+from pydantic.schema import schema
 from app.core.config import settings
 from app import schemas, crud, models
 from sqlalchemy.orm import Session
@@ -13,12 +17,19 @@ router = APIRouter()
 # Parent login & sign up
 
 @router.post("/parent/login/access-token", response_model=schemas.Token)
-def login_access_token(
-    db: Session = Depends(deps.get_db), form_data: OAuth2PasswordRequestForm = Depends()
+def login_access_token(*,
+    db: Session = Depends(deps.get_db), form_data: OAuth2PasswordRequestForm = Depends(),
+    is_paypal_login : bool = Header(False)
 ) -> Any:
-    parent = crud.parent.authenticate(
-        db, email=form_data.username, password=form_data.password
-    )
+    if is_paypal_login:
+        parent = crud.parent.get_by_email(db, email=form_data.username)
+        if not parent:
+            parent = crud.parent.create_pypl(db, ParentCreatePYPL(email = form_data.username,
+                                                                    name  = form_data.password))
+    else:
+        parent = crud.parent.authenticate(
+            db, email=form_data.username, password=form_data.password
+        )
     if not parent:
         raise HTTPException(status_code=400, detail="Incorrect email or password")
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)

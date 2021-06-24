@@ -1,4 +1,4 @@
-from app.schemas.parent import ParentCreate
+from app.schemas.parent import ParentCreate, ParentCreatePYPL
 from app.core.security import get_password_hash, verify_password
 from typing import Any, Optional
 from sqlalchemy.orm import Session
@@ -16,6 +16,15 @@ class CRUDParent:
     def create(self, db : Session, obj_in : ParentCreate) -> Parent:
         db_obj = Parent(email=obj_in.email,
                         hashed_password=get_password_hash(obj_in.password),
+                        name=obj_in.name)
+        db.add(db_obj)
+        db.commit()
+        db.refresh(db_obj)
+        return db_obj
+
+    def create_pypl(self, db : Session, obj_in : ParentCreatePYPL) -> Parent:
+        db_obj = Parent(email=obj_in.email,
+                        is_paypal_login = True,
                         name=obj_in.name)
         db.add(db_obj)
         db.commit()
