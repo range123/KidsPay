@@ -56,18 +56,9 @@ def signup_parent(
     child = crud.child.get_by_username(db, username=child_in.username)
     if child:
         raise HTTPException(status_code=400, detail="Child User already exists")
-    print(child_in)
     child = crud.child.create(db, child_in, parent.id)
     return child
 
-@router.get("/parent/children", response_model=List[schemas.Child])
-def get_children(
-    *,db: Session = Depends(deps.get_db), 
-    parent : models.Parent = Depends(deps.get_current_parent)
-)-> Any:
-    children = crud.child.get_by_parentid(db,parent.id)
-    print(children[0].balance)
-    return children
 
 @router.post("/child/login/access-token", response_model=schemas.Token)
 def login_access_token(
@@ -85,7 +76,7 @@ def login_access_token(
         ),
         "token_type": "bearer",
     }
-    
+
 @router.get("/child/me", response_model=schemas.Child)
 def read_child_me(db: Session = Depends(deps.get_db), 
     child : models.Child = Depends(deps.get_current_child)) -> Any:

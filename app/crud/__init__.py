@@ -11,3 +11,4 @@
 from .crud_test import test
 from .crud_parent import parent
 from .crud_child import child
+from .crud_transaction import transaction

@@ -50,6 +50,14 @@ class CRUDCHild:
         db.refresh(child)
         return child
     
+    def withdraw_balance(self, db : Session, id : int, amt : float) -> Optional[Child]:
+        child = db.query(self.model).get(id)
+        child.balance -= amt
+        db.add(child)
+        db.commit()
+        db.refresh(child)
+        return child
+    
     def set_transaction_restriction(self, db : Session, id : int, restriction_amt : float) -> Optional[Child]:
         child = db.query(self.model).get(id)
         child.max_single_transaction_limit = restriction_amt
@@ -61,6 +69,11 @@ class CRUDCHild:
     def get_by_parentid(self, db : Session, parent_id : int) -> List[Child]:
         children = db.query(self.model).filter(Child.parent_id == parent_id).all()
         return children
+
+    def get_by_parentid_and_childid(self, db : Session, parent_id : int, child_id : int) -> Optional[Child]:
+        child = db.query(self.model).filter(Child.parent_id == parent_id,
+                                                Child.id == child_id).first()
+        return child
 
     
 

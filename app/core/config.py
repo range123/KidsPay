@@ -45,7 +45,7 @@ class Settings(BaseSettings):
             host=values.get("POSTGRES_SERVER"),
             path=f"/{values.get('POSTGRES_DB') or ''}",
         )
-    
+    PYPL_SECRET: str = "QVhjTHZLTFVWRW9WbEhCdU4xbE9IOWtpNUQzZUxVMG1WOVpWRm1XV2YwTXJlZkNHc1ZyLVNtd3dKdGNqLUp1dTN3RGdpWmJ2bWFMclBRM186RURQRG01bUZkaFE0dWI5Z3lzRjhqaTJNMFdERWZfalNqWGNIdExKYmpTdDRPdlNGczYzRkZGUHFrTWN1QWdiM3kyVVZyRGF2bGJZUWpOd0g="
 
 
 

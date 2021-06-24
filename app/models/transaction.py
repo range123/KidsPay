@@ -5,7 +5,7 @@ from sqlalchemy.sql import func
 
 
 from app.db.base_class import Base
-from sqlalchemy import Column, ForeignKey, Integer, String, Float, DateTime
+from sqlalchemy import Column, ForeignKey, Integer, String, Float, DateTime, Boolean
 from sqlalchemy.orm import relationship
 
 if TYPE_CHECKING:
@@ -21,3 +21,5 @@ class Transaction(Base):
 
     child_id = Column(Integer,ForeignKey("child.id"))
     child = relationship("Child", back_populates="transactions")
+
+    is_merchant_transfer = Column(Boolean, default=True)
