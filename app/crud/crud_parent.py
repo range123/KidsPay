@@ -1,7 +1,6 @@
 from app.schemas.parent import ParentCreate
 from app.core.security import get_password_hash, verify_password
 from typing import Any, Optional
-from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 from app.models.parent import Parent
 class CRUDParent:

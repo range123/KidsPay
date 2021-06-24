@@ -14,6 +14,9 @@ from app import crud
 parent_oauth2 = OAuth2PasswordBearer(
     tokenUrl=f"parent/login/access-token"
 )
+child_oauth2 = OAuth2PasswordBearer(
+    tokenUrl=f"child/login/access-token"
+)
 
 def get_db() -> Generator:
     try:
@@ -39,3 +42,21 @@ def get_current_parent(
     if not parent:
         raise HTTPException(status_code=404, detail="User not found")
     return parent
+
+def get_current_child(
+    db: Session = Depends(get_db), token: str = Depends(child_oauth2)
+    ) -> models.Child :
+    try:
+        payload = jwt.decode(
+            token, settings.SECRET_KEY_CHILD, algorithms=[security.ALGORITHM]
+        )
+        token_data = schemas.TokenPayload(**payload)
+    except (jwt.JWTError, ValidationError):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Could not validate credentials",
+        )
+    child = crud.child.get(db, id=token_data.sub)
+    if not child:
+        raise HTTPException(status_code=404, detail="User not found")
+    return child
