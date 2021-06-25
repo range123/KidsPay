@@ -45,6 +45,7 @@ def make_payment_to_receiver(receiver_id, trans_id, amount, sender):
     }
     try:
         response = session.request("POST", url, headers=headers, data=payload)
+        response = json.loads(response.text)
         status = response["batch_header"]["batch_status"]
 
         if status == "PENDING":
