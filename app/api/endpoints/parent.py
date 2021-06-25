@@ -17,7 +17,7 @@ def add_balance_to_child(*,
 ) -> Any:
     child = crud.child.get_by_parentid_and_childid(db, parent.id, child_id=child_id)
     if not child:
-        raise HTTPException(status=400, detail="Not authorised or child does not exist!")
+        raise HTTPException(status_code=400, detail="Not authorised or child does not exist!")
     child = crud.child.add_balance(db,child.id,amount)
     return child
     
@@ -31,7 +31,7 @@ def set_restrictions_to_child(*,
 ) -> Any:
     child = crud.child.get_by_parentid_and_childid(db, parent.id, child_id=child_id)
     if not child:
-        raise HTTPException(status=400, detail="Not authorised or child does not exist!")
+        raise HTTPException(status_code=400, detail="Not authorised or child does not exist!")
     child = crud.child.set_transaction_restriction(db, child.id, max_single_transaction_limit)
     return child
 
@@ -44,7 +44,7 @@ def withdraw_from_child(*,
 ) -> Any:
     child = crud.child.get_by_parentid_and_childid(db, parent.id, child_id=child_id)
     if not child:
-        raise HTTPException(status=400, detail="Not authorised or child does not exist!")
+        raise HTTPException(status_code=400, detail="Not authorised or child does not exist!")
     if child.balance < amount:
         raise HTTPException(status_code=400, detail="Insufficient Balance")
     refund_id = uuid.uuid1().int>>34
@@ -63,7 +63,7 @@ def get_child_transactions(*,
 ) -> Any:
     child = crud.child.get_by_parentid_and_childid(db, parent.id, child_id=child_id)
     if not child:
-        raise HTTPException(status=400, detail="Not authorised or child does not exist!")
+        raise HTTPException(status_code=400, detail="Not authorised or child does not exist!")
     return child.transactions
 
 @router.get("/children", response_model=List[schemas.Child])
