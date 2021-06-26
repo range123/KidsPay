@@ -3,14 +3,14 @@ from typing import Optional
 from pydantic import BaseModel, Field, EmailStr
 
 class TransactionCreate(BaseModel):
-    category : str = Field(..., title="Transaction category")
+    category : str = Field(..., title="Transaction category", min_length=1)
     amount : float = Field(..., title="Transaction amount",gt=0)
     receiver_id : EmailStr = Field(..., title="receiver paypal Email id")
 
 class TransactionCreateChild(BaseModel):
-    category : str = Field(..., title="Transaction category")
+    category : str = Field(..., title="Transaction category", min_length=1)
     amount : float = Field(..., title="Transaction amount",gt=0)
-    receiver_id : str = Field(..., title="Receiving Child username")
+    receiver_id : str = Field(..., title="Receiving Child username", regex="^[a-zA-Z0-9_.-]+$")
 
 class Transaction(BaseModel):
     id : int
