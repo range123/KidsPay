@@ -4,6 +4,6 @@ SQLAlchemy==1.4.19
 psycopg2-binary==2.9.1
 passlib[bcrypt]==1.7.4
 python-jose[cryptography]==3.3.0
-pydantic[email]==1.8.2
+pydantic[email,dotenv]==1.8.2
 python-multipart==0.0.5
 requests==2.25.1

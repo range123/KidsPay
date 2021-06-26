@@ -15,6 +15,7 @@
 
 
 ## Installation
+* Create .env file with fields from .env.example file
 
 * Spawn the postgres DB with
 

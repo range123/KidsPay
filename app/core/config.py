@@ -1,13 +1,12 @@
-import secrets
 from typing import Any, Dict, List, Optional, Union
 
-from pydantic import AnyHttpUrl, BaseSettings, EmailStr, HttpUrl, PostgresDsn, validator
+from pydantic import AnyHttpUrl, BaseSettings, PostgresDsn, validator, Field
 
 
 class Settings(BaseSettings):
     # SECRET_KEY: str = secrets.token_urlsafe(32)
-    SECRET_KEY_PARENT: str = "1ff38cc8a80daca1b1be35efa773f612a333b07d165ef6c1ff8b638bd80cb4a0"
-    SECRET_KEY_CHILD: str = "7f44c488a77d4f84aa0402bfbc346c8366240397452e486b2e0f4e0f397fbce4"
+    SECRET_KEY_PARENT: str = Field(...)
+    SECRET_KEY_CHILD: str = Field(...)
     # 60 minutes * 24 hours * 8 days = 8 days
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 365
     # SERVER_NAME: str
@@ -29,9 +28,9 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "KidsPay"
 
     POSTGRES_SERVER: str = "localhost"
-    POSTGRES_USER: str = "postgres"
-    POSTGRES_PASSWORD: str = "postgres"
-    POSTGRES_DB: str = "app"
+    POSTGRES_USER: str = Field(...)
+    POSTGRES_PASSWORD: str = Field(...)
+    POSTGRES_DB: str = Field(...)
     SQLALCHEMY_DATABASE_URI: Optional[PostgresDsn] = None
 
     @validator("SQLALCHEMY_DATABASE_URI", pre=True)
@@ -45,7 +44,11 @@ class Settings(BaseSettings):
             host=values.get("POSTGRES_SERVER"),
             path=f"/{values.get('POSTGRES_DB') or ''}",
         )
-    PYPL_SECRET: str = "QVhjTHZLTFVWRW9WbEhCdU4xbE9IOWtpNUQzZUxVMG1WOVpWRm1XV2YwTXJlZkNHc1ZyLVNtd3dKdGNqLUp1dTN3RGdpWmJ2bWFMclBRM186RURQRG01bUZkaFE0dWI5Z3lzRjhqaTJNMFdERWZfalNqWGNIdExKYmpTdDRPdlNGczYzRkZGUHFrTWN1QWdiM3kyVVZyRGF2bGJZUWpOd0g="
+    PYPL_SECRET: str = Field(...)
+
+    class Config:
+        env_file = '.env'
+        env_file_encoding = 'utf-8'
 
 
 settings = Settings()
