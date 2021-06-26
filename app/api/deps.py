@@ -18,6 +18,7 @@ child_oauth2 = OAuth2PasswordBearer(
     tokenUrl=f"child/login/access-token"
 )
 
+
 def get_db() -> Generator:
     try:
         db = SessionLocal()
@@ -25,9 +26,10 @@ def get_db() -> Generator:
     finally:
         db.close()
 
+
 def get_current_parent(
     db: Session = Depends(get_db), token: str = Depends(parent_oauth2)
-    ) -> models.Parent :
+) -> models.Parent:
     try:
         payload = jwt.decode(
             token, settings.SECRET_KEY_PARENT, algorithms=[security.ALGORITHM]
@@ -43,9 +45,10 @@ def get_current_parent(
         raise HTTPException(status_code=404, detail="User not found")
     return parent
 
+
 def get_current_child(
     db: Session = Depends(get_db), token: str = Depends(child_oauth2)
-    ) -> models.Child :
+) -> models.Child:
     try:
         payload = jwt.decode(
             token, settings.SECRET_KEY_CHILD, algorithms=[security.ALGORITHM]

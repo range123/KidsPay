@@ -7,12 +7,13 @@ if TYPE_CHECKING:
     from .parent import Parent
     from .transaction import Transaction
 
+
 class Child(Base):
     id = Column(Integer, index=True, primary_key=True)
     name = Column(String)
     balance = Column(Float, default=0.0, index=True)
 
-    parent_id = Column(Integer,ForeignKey("parent.id"))
+    parent_id = Column(Integer, ForeignKey("parent.id"))
     parent = relationship("Parent", back_populates="children")
 
     username = Column(String, unique=True, index=True, nullable=False)

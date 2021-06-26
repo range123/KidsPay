@@ -7,6 +7,7 @@ from sqlalchemy.orm import relationship
 if TYPE_CHECKING:
     from .child import Child
 
+
 class Parent(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)

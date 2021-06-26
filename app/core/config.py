@@ -15,8 +15,8 @@ class Settings(BaseSettings):
     # BACKEND_CORS_ORIGINS is a JSON-formatted list of origins
     # e.g: '["http://localhost", "http://localhost:4200", "http://localhost:3000", \
     # "http://localhost:8080", "http://local.dockertoolbox.tiangolo.com"]'
-    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = ["http://localhost", "http://localhost:4200", "http://localhost:3000", \
-    "http://localhost:8080", "http://localhost:5000"]
+    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = ["http://localhost", "http://localhost:4200", "http://localhost:3000",
+                                              "http://localhost:8080", "http://localhost:5000"]
 
     @validator("BACKEND_CORS_ORIGINS", pre=True)
     def assemble_cors_origins(cls, v: Union[str, List[str]]) -> Union[List[str], str]:
@@ -46,7 +46,6 @@ class Settings(BaseSettings):
             path=f"/{values.get('POSTGRES_DB') or ''}",
         )
     PYPL_SECRET: str = "QVhjTHZLTFVWRW9WbEhCdU4xbE9IOWtpNUQzZUxVMG1WOVpWRm1XV2YwTXJlZkNHc1ZyLVNtd3dKdGNqLUp1dTN3RGdpWmJ2bWFMclBRM186RURQRG01bUZkaFE0dWI5Z3lzRjhqaTJNMFdERWZfalNqWGNIdExKYmpTdDRPdlNGczYzRkZGUHFrTWN1QWdiM3kyVVZyRGF2bGJZUWpOd0g="
-
 
 
 settings = Settings()
