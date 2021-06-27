@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException, Body
 from app import schemas, crud, models
 from sqlalchemy.orm import Session
 from app.api import deps
-from typing import Any, List
+from typing import Any, List, Optional
 import uuid
 
 router = APIRouter()
@@ -33,7 +33,8 @@ def set_restrictions_to_child(*,
                                   deps.get_current_parent),
                               child_id: int = Body(...),
                               max_single_transaction_limit: float = Body(
-                                  ..., gt=0)
+                                  ..., gt=0),
+                              allowed_ids: Optional[List[str]] = Body([])
                               ) -> Any:
     child = crud.child.get_by_parentid_and_childid(
         db, parent.id, child_id=child_id)
@@ -41,7 +42,7 @@ def set_restrictions_to_child(*,
         raise HTTPException(
             status_code=400, detail="Not authorised or child does not exist!")
     child = crud.child.set_transaction_restriction(
-        db, child.id, max_single_transaction_limit)
+        db, child.id, max_single_transaction_limit, allowed_ids)
     return child
 
 

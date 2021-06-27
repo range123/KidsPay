@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from app.db.base_class import Base
-from sqlalchemy import Column, ForeignKey, Integer, String, Float
+from sqlalchemy import Column, ForeignKey, Integer, String, Float, ARRAY
 from sqlalchemy.orm import relationship
 
 if TYPE_CHECKING:
@@ -22,3 +22,5 @@ class Child(Base):
     max_single_transaction_limit = Column(Float, default=1e7, index=True)
 
     transactions = relationship("Transaction", back_populates="child")
+
+    allowed_ids = Column(ARRAY(String), default=[])

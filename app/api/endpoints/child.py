@@ -30,6 +30,9 @@ def transfer_to_merchant(*,
     if transaction_in.amount > child.max_single_transaction_limit:
         raise HTTPException(
             status_code=400, detail=f"Amount exceeds restriction set, {child.max_single_transaction_limit}")
+    if transaction_in.receiver_id not in child.allowed_ids:
+        raise HTTPException(
+            status_code=400, detail=f"Receiver id not allowed {transaction_in.receiver_id}")
     transaction_id = uuid.uuid1().int >> 34
     try:
         paypal_admin.make_payment_to_receiver(
@@ -52,7 +55,9 @@ def transfer_to_child(*,
     if transaction_in.amount > child.max_single_transaction_limit:
         raise HTTPException(
             status_code=400, detail=f"Amount exceeds restriction set, {child.max_single_transaction_limit}")
-
+    if transaction_in.receiver_id not in child.allowed_ids:
+        raise HTTPException(
+            status_code=400, detail=f"Receiver id not allowed {transaction_in.receiver_id}")
     other_child: models.Child = crud.child.get_by_username(
         db, transaction_in.receiver_id)
     if not other_child:

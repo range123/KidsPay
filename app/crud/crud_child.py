@@ -25,6 +25,8 @@ class CRUDCHild:
                        )
         if obj_in.max_single_transaction_limit:
             db_obj.max_single_transaction_limit = obj_in.max_single_transaction_limit
+        if obj_in.allowed_ids:
+            db_obj.allowed_ids = obj_in.allowed_ids
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
@@ -60,9 +62,10 @@ class CRUDCHild:
         db.refresh(child)
         return child
 
-    def set_transaction_restriction(self, db: Session, id: int, restriction_amt: float) -> Optional[Child]:
+    def set_transaction_restriction(self, db: Session, id: int, restriction_amt: float, allowed_ids: List[str]) -> Optional[Child]:
         child = db.query(self.model).get(id)
         child.max_single_transaction_limit = restriction_amt
+        child.allowed_ids = child.allowed_ids + allowed_ids
         db.add(child)
         db.commit()
         db.refresh(child)
