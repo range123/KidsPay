@@ -14,6 +14,9 @@ class CRUDTransaction:
     def get_by_child_id(self, db: Session, child_id: int) -> List[Transaction]:
         return db.query(self.model).filter(self.model.child_id == child_id).all()
 
+    def get_by_child_id_and_receiver(self, db: Session, child_id: int, child_uname: str) -> List[Transaction]:
+        return db.query(self.model).filter((self.model.child_id == child_id) | (self.model.receiver_id == child_uname)).all()
+
     def create(self, db: Session, obj_in: TransactionCreate, child_id, is_merchant_transfer=True) -> Transaction:
         db_obj = Transaction(amount=obj_in.amount,
                              category=obj_in.category,

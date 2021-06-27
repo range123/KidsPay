@@ -57,7 +57,7 @@ def get_current_child(
     except (jwt.JWTError, ValidationError):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Could not validate credentials",
+            detail="Could not validate credentials, Attemp to relogin",
         )
     child = crud.child.get(db, id=token_data.sub)
     if not child:

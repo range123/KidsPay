@@ -82,7 +82,9 @@ def get_child_transactions(*,
     if not child:
         raise HTTPException(
             status_code=400, detail="Not authorised or child does not exist!")
-    return child.transactions
+    transactions = crud.transaction.get_by_child_id_and_receiver(
+        db, child.id, child.username)
+    return transactions
 
 
 @router.get("/children", response_model=List[schemas.Child])

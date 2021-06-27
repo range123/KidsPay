@@ -14,7 +14,9 @@ def get_transactions(*,
                      db: Session = Depends(deps.get_db),
                      child: models.Child = Depends(deps.get_current_child)
                      ) -> Any:
-    return child.transactions
+    transactions = crud.transaction.get_by_child_id_and_receiver(
+        db, child.id, child.username)
+    return transactions
 
 
 @router.post("/merchant_transfer", response_model=schemas.Transaction)
@@ -27,7 +29,7 @@ def transfer_to_merchant(*,
         raise HTTPException(status_code=400, detail="Insufficient balance")
     if transaction_in.amount > child.max_single_transaction_limit:
         raise HTTPException(
-            status_code=400, detail="Amount exceeds restriction set")
+            status_code=400, detail=f"Amount exceeds restriction set, {child.max_single_transaction_limit}")
     transaction_id = uuid.uuid1().int >> 34
     try:
         paypal_admin.make_payment_to_receiver(
@@ -49,7 +51,7 @@ def transfer_to_child(*,
         raise HTTPException(status_code=400, detail="Insufficient balance")
     if transaction_in.amount > child.max_single_transaction_limit:
         raise HTTPException(
-            status_code=400, detail="Amount exceeds restriction set")
+            status_code=400, detail=f"Amount exceeds restriction set, {child.max_single_transaction_limit}")
 
     other_child: models.Child = crud.child.get_by_username(
         db, transaction_in.receiver_id)
